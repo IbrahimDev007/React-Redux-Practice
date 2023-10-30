@@ -1,15 +1,11 @@
-
+import { Counters } from "./Fetures/Counter/Counters";
 
 function App() {
-
-
-  return (
-    <>
-    ----
-    ----------------
-       
-    </>
-  )
+	return (
+		<>
+			<Counters />
+		</>
+	);
 }
 
-export default App
+export default App;
