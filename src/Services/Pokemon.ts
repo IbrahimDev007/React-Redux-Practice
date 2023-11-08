@@ -1,6 +1,10 @@
 // rtk query api create
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-type Pokemon = { query: string };
+type Pokemon = {
+	species: string[];
+	sprites: string[];
+	// ============
+};
 
 export const pokemonAPI = createApi({
 	reducerPath: "pokemonApi",
