@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "../Fetures/Counter/slice";
+import counterReducer from "../Fetures/slice";
 import { pokemonAPI } from "../Services/Pokemon";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { postApi } from "../Services/Post";
