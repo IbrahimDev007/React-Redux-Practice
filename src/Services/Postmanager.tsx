@@ -2,9 +2,8 @@
 import React from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { useToast } from "react-toastify";
-import { useAddPostMutation, useGetPostsQuery } from "../app/services/posts";
-import EditablePostName from "./EditablePostName";
-import PostDetail from "./PostDetail";
+import { useAddPostMutation, useGetPostsQuery } from "../Services/Post";
+import { PostDetail } from "./PostDetail";
 
 interface Post {
 	id: string;
