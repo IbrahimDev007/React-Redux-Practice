@@ -10,25 +10,21 @@ type PostsResponse = Post[];
 
 export const postApi = createApi({
 	reducerPath: "postsApi",
-	baseQuery: fetchBaseQuery({ baseUrl: "/" }),
+	baseQuery: fetchBaseQuery({ baseUrl: " http://localhost:3000" }),
 	tagTypes: ["Posts"],
 	endpoints: (build) => ({
 		getPosts: build.query<PostsResponse, void>({
 			query: () => "posts",
-			// Provides a list of `Posts` by `id`.
-			// If any mutation is executed that `invalidate`s any of these tags, this query will re-run to be always up-to-date.
-			// The `LIST` id is a "virtual id" we just made up to be able to invalidate this query specifically if a new `Posts` element was added.
-			providesTags: (result) =>
-				// is result available?
-				result
-					? // successful query
+			providesTags: (result) => {
+				console.log(result);
 
-					  [
+				return result
+					? [
 							...result.map(({ id }) => ({ type: "Posts", id } as const)),
 							{ type: "Posts", id: "LIST" },
 					  ]
-					: // an error occurred, but we still want to refetch this query when `{ type: 'Posts', id: 'LIST' }` is invalidated
-					  [{ type: "Posts", id: "LIST" }],
+					: [{ type: "Posts", id: "LIST" }];
+			},
 		}),
 		addPost: build.mutation<Post, Partial<Post>>({
 			query(body) {
@@ -38,8 +34,7 @@ export const postApi = createApi({
 					body,
 				};
 			},
-			// Invalidates all Post-type queries providing the `LIST` id - after all, depending of the sort order,
-			// that newly created post could show up in any lists.
+
 			invalidatesTags: [{ type: "Posts", id: "LIST" }],
 		}),
 		getPost: build.query<Post, number>({
@@ -55,8 +50,6 @@ export const postApi = createApi({
 					body,
 				};
 			},
-			// Invalidates all queries that subscribe to this Post `id` only.
-			// In this case, `getPost` will be re-run. `getPosts` *might*  rerun, if this id was under its results.
 			invalidatesTags: (result, error, { id }) => [{ type: "Posts", id }],
 		}),
 		deletePost: build.mutation<{ success: boolean; id: number }, number>({
@@ -66,7 +59,7 @@ export const postApi = createApi({
 					method: "DELETE",
 				};
 			},
-			// Invalidates all queries that subscribe to this Post `id` only.
+
 			invalidatesTags: (result, error, id) => [{ type: "Posts", id }],
 		}),
 	}),

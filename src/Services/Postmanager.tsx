@@ -1,7 +1,7 @@
 // PostsManager.tsx
 import React from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import { useToast } from "react-toastify";
+// import { useToast } from "react-toastify";
 import { useAddPostMutation, useGetPostsQuery } from "../Services/Post";
 import { PostDetail } from "./PostDetail";
 
@@ -14,7 +14,7 @@ const AddPost: React.FC = () => {
 	const initialValue: Post = { id: "", name: "" };
 	const [post, setPost] = React.useState<Post>({ id: "", name: "" });
 	const [addPost, { isLoading }] = useAddPostMutation();
-	const toast = useToast();
+	// const toast = useToast();
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setPost((prev) => ({
@@ -25,12 +25,15 @@ const AddPost: React.FC = () => {
 
 	const handleAddPost = async () => {
 		try {
-			await addPost(post).unwrap();
+			// Omit the id field when sending to the backend
+			const { id, ...postData } = post;
+			const response = await addPost(postData).unwrap();
+			// Handle success, maybe show a toast or update UI
+			console.log("Post added successfully:", response);
 			setPost(initialValue);
-		} catch {
-			toast.error("We couldn't save your post, try again!", {
-				autoClose: 2000,
-			});
+		} catch (error) {
+			// Handle error, show a toast or update UI
+			console.error("Error adding post:", error);
 		}
 	};
 
@@ -83,9 +86,9 @@ const PostList: React.FC = () => {
 
 	return (
 		<ul className="list-disc ml-4">
-			{posts.map(({ id, name }) => (
+			{posts.map(({ id, name }, index) => (
 				<li
-					key={id}
+					key={index}
 					onClick={() => navigate(`/posts/${id}`)}
 					className="cursor-pointer text-green-500 hover:underline"
 				>

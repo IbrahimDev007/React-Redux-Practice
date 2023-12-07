@@ -1,7 +1,7 @@
 // EditablePostName.tsx
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useToast } from "react-toastify";
+// import { useToast } from "react-toastify";
 import {
 	useGetPostQuery,
 	useDeletePostMutation,
@@ -68,7 +68,7 @@ export const EditablePostName: React.FC<EditablePostNameProps> = ({
 export const PostDetail: React.FC = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
-	const toast = useToast();
+	// const toast = useToast();
 
 	const [isEditing, setIsEditing] = useState(false);
 
@@ -99,11 +99,12 @@ export const PostDetail: React.FC = () => {
 					name={post.name}
 					onUpdate={async (name) => {
 						try {
-							await updatePost({ id, name }).unwrap();
-						} catch {
-							toast.error("We couldn't save your changes, try again!", {
-								autoClose: 2000,
-							});
+							const response = await updatePost({ id, name }).unwrap();
+							// Handle success, maybe show a toast or update UI
+							console.log("Post updated successfully:", response);
+						} catch (error) {
+							// Handle error, show a toast or update UI
+							console.error("Error updating post:", error);
 						} finally {
 							setIsEditing(false);
 						}
@@ -152,7 +153,7 @@ const PostJsonDetail: React.FC<PostJsonDetailProps> = ({ id }) => {
 
 	return (
 		<div className="mt-5 bg-gray-200 p-4">
-			<pre>{JSON.stringify(post, null, 2)}</pre>
+			<pre>{post ? JSON.stringify(post, null, 2) : "Loading..."}</pre>
 		</div>
 	);
 };
